@@ -8,7 +8,7 @@ import (
 	"github.com/WrastAct/maestro/internal/validator"
 )
 
-func (app *application) addGameHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) createGameHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Name string `json:"name"`
 	}

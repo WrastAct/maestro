@@ -81,8 +81,3 @@ func (app *application) notPermittedResponse(w http.ResponseWriter, r *http.Requ
 	message := "you don't have necessary permissions to access this resource"
 	app.errorResponse(w, r, http.StatusForbidden, message)
 }
-
-func (app *application) foreignRoomResponse(w http.ResponseWriter, r *http.Request) {
-	message := "you can't change other users' rooms"
-	app.errorResponse(w, r, http.StatusForbidden, message)
-}
