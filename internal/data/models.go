@@ -11,6 +11,7 @@ var (
 )
 
 type Models struct {
+	Game        GameModel
 	Tokens      TokenModel
 	Users       UserModel
 	Permissions PermissionModel
@@ -20,6 +21,7 @@ type Models struct {
 
 func NewModels(db *sql.DB) Models {
 	return Models{
+		Game:        GameModel{DB: db},
 		Tokens:      TokenModel{DB: db},
 		Users:       UserModel{DB: db},
 		Permissions: PermissionModel{DB: db},
