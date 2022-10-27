@@ -18,6 +18,45 @@ type TeamUsersModel struct {
 	DB *sql.DB
 }
 
+func (m TeamUsersModel) Insert(teamUsers *TeamUsers) error {
+	query := `
+		INSERT INTO teams_users (user_id, teams_id, join_date, leave_date, role)
+		VALUES ($1, $2, $3, $4, $5)`
+
+	args := []interface{}{teamUsers.UserID, teamUsers.TeamID, teamUsers.JoinDate,
+		teamUsers.LeaveDate, teamUsers.Role}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	_, err := m.DB.ExecContext(ctx, query, args...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m TeamUsersModel) Update(teamUsers *TeamUsers) error {
+	query := `
+		UPDATE teams_users
+		SET join_date = $1, leave_date = $2, role = $3
+		WHERE teams_id = $4 AND user_id = $5`
+
+	args := []interface{}{
+		teamUsers.JoinDate,
+		teamUsers.LeaveDate,
+		teamUsers.Role,
+		teamUsers.TeamID,
+		teamUsers.UserID,
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	_, err := m.DB.ExecContext(ctx, query, args...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m TeamUsersModel) GetAllByTeam(teamID int64) ([]*TeamUsers, error) {
 	query := `
 		SELECT user_id, join_date, leave_date
