@@ -107,7 +107,8 @@ func (m UserModel) Insert(user *User) error {
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING users_id, created_at, version`
 
-	args := []interface{}{user.Name, user.Email, user.Password.hash, user.Activated}
+	args := []interface{}{user.Name, user.Description, user.Nationality, user.Birthday,
+		user.Email, user.Password.hash, user.Activated, user.VerifiedPro}
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -186,7 +187,7 @@ func (m UserModel) Update(user *User) error {
 	query := `
 		UPDATE users
 		SET users_name = $1, users_description = $2, nationality = $3, birthday = $4, email = $5, 
-			password_hash = $6, activated = $7, verified_pro = $8 version = version + 1
+			password_hash = $6, activated = $7, verified_pro = $8, version = version + 1
 		WHERE users_id = $9 AND version = $10
 		RETURNING version`
 

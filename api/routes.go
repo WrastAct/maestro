@@ -16,26 +16,16 @@ func (app *application) routes() http.Handler {
 
 	//TODO: add handlers
 
-	// router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.requirePermission("admin", app.healthcheckHandler))
-	// router.HandlerFunc(http.MethodGet, "/v1/rooms", app.requireAuthenticatedUser(app.listRoomHandler))
-	// router.HandlerFunc(http.MethodPost, "/v1/rooms", app.requirePermission("user", app.createRoomHandler))
-	// router.HandlerFunc(http.MethodGet, "/v1/rooms/:id", app.requirePermission("user", app.showRoomHandler))
-	// router.HandlerFunc(http.MethodPatch, "/v1/rooms/:id", app.requirePermission("user", app.updateRoomHandler))
-	// router.HandlerFunc(http.MethodDelete, "/v1/rooms/:id", app.requirePermission("user", app.deleteRoomHandler))
+	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.requireAuthenticatedUser(app.healthcheckHandler))
+	//app.requirePermission("user", app.createSomething)
+	//app.requireAuthenticatedUser
 
-	// router.HandlerFunc(http.MethodGet, "/v1/furniture", app.listFurnitureHandler)
-	// router.HandlerFunc(http.MethodPost, "/v1/furniture", app.createFurnitureHandler)
-	// router.HandlerFunc(http.MethodGet, "/v1/furniture/:id", app.showFurnitureHandler)
-	// router.HandlerFunc(http.MethodPatch, "/v1/furniture/:id", app.updateFurnitureHandler)
-	// router.HandlerFunc(http.MethodDelete, "/v1/furniture/:id", app.deleteFurnitureHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/users", app.registerUserHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/users/activated", app.activateUserHandler)
 
-	// router.HandlerFunc(http.MethodPost, "/v1/users", app.registerUserHandler)
-	// router.HandlerFunc(http.MethodPut, "/v1/users/activated", app.activateUserHandler)
-
-	// router.HandlerFunc(http.MethodPost, "/v1/tokens/authentication", app.createAuthenticationTokenHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/tokens/authentication", app.createAuthenticationTokenHandler)
 
 	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 
-	//todo add authentication e.g. app.authenticate
-	return app.metrics(app.recoverPanic(app.enableCORS(app.rateLimit(router))))
+	return app.metrics(app.recoverPanic(app.enableCORS(app.rateLimit(app.authenticate(router)))))
 }
