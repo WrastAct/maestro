@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS users_matches;
+DROP TABLE IF EXISTS matches;

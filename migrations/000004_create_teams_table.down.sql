@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS teams_users;
+DROP TABLE IF EXISTS teams;
