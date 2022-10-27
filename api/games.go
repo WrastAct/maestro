@@ -73,7 +73,7 @@ func (app *application) showGameHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func (app *application) updateFurnitureHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) updateGameHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)

@@ -17,9 +17,11 @@ type Tournament struct {
 	EndDate   string `json:"end_date"`
 }
 
-func ValidateTournament(v *validator.Validator, team *Team) {
-	v.Check(team.Name != "", "name", "must be provided")
-	v.Check(len(team.Name) <= 100, "name", "must not be more than 100 bytes long")
+func ValidateTournament(v *validator.Validator, tournament *Tournament) {
+	v.Check(tournament.Name != "", "name", "must be provided")
+	v.Check(len(tournament.Name) <= 100, "name", "must not be more than 100 bytes long")
+	ValidateDate(v, tournament.StartDate)
+	ValidateDate(v, tournament.EndDate)
 }
 
 type TournamentModel struct {
@@ -139,4 +141,33 @@ func (m TournamentModel) GetAll() ([]*Tournament, error) {
 	}
 
 	return tournaments, nil
+}
+
+func (m TournamentModel) Delete(id int64) error {
+	if id < 1 {
+		return ErrRecordNotFound
+	}
+
+	query := `
+		DELETE FROM tournaments
+		WHERE tournaments_id = $1`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	result, err := m.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return ErrRecordNotFound
+	}
+
+	return nil
 }
