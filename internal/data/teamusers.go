@@ -34,7 +34,6 @@ func (m TeamUsersModel) GetAllByTeam(teamID int64) ([]*TeamUsers, error) {
 
 	defer rows.Close()
 
-	totalRecords := 0
 	teamsUsers := []*TeamUsers{}
 
 	for rows.Next() {
@@ -43,7 +42,6 @@ func (m TeamUsersModel) GetAllByTeam(teamID int64) ([]*TeamUsers, error) {
 		teamUser.TeamID = teamID
 
 		err := rows.Scan(
-			&totalRecords,
 			&teamUser.UserID,
 			&teamUser.JoinDate,
 			&teamUser.LeaveDate,
@@ -78,7 +76,6 @@ func (m TeamUsersModel) GetAllByUser(userID int64) ([]*TeamUsers, error) {
 
 	defer rows.Close()
 
-	totalRecords := 0
 	teamsUsers := []*TeamUsers{}
 
 	for rows.Next() {
@@ -87,7 +84,6 @@ func (m TeamUsersModel) GetAllByUser(userID int64) ([]*TeamUsers, error) {
 		teamUser.UserID = userID
 
 		err := rows.Scan(
-			&totalRecords,
 			&teamUser.UserID,
 			&teamUser.JoinDate,
 			&teamUser.LeaveDate,
