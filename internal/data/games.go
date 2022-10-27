@@ -67,6 +67,44 @@ func (m GameModel) Get(id int64) (*Game, error) {
 	return &game, nil
 }
 
+func (m GameModel) GetAll() ([]*Game, error) {
+	query := `
+		SELECT games_id, games_name
+		FROM games`
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	games := []*Game{}
+
+	for rows.Next() {
+		var game Game
+
+		err := rows.Scan(
+			&game.ID,
+			&game.Name,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		games = append(games, &game)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return games, nil
+}
+
 func (m GameModel) Update(game *Game) error {
 	query := `
 		UPDATE games

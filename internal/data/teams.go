@@ -114,14 +114,12 @@ func (m TeamModel) GetAllByRegion(region string) ([]*Team, error) {
 
 	defer rows.Close()
 
-	totalRecords := 0
 	teams := []*Team{}
 
 	for rows.Next() {
 		var team Team
 
 		err := rows.Scan(
-			&totalRecords,
 			&team.Name,
 			&team.Description,
 		)
