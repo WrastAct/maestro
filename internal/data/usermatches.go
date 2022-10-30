@@ -24,7 +24,7 @@ type UserMatchModel struct {
 
 func (m UserMatchModel) Insert(userMatch *UserMatch) error {
 	query := `
-		INSERT INTO users_matches (user_id, matches_id, tournaments_id, result, average_stress,
+		INSERT INTO users_matches (users_id, matches_id, tournaments_id, result, average_stress,
 			humidity, temperature, pressure)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 

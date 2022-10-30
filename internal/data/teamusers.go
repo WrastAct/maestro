@@ -59,7 +59,7 @@ func (m TeamUsersModel) Update(teamUsers *TeamUsers) error {
 
 func (m TeamUsersModel) GetAllByTeam(teamID int64) ([]*TeamUsers, error) {
 	query := `
-		SELECT user_id, join_date, leave_date
+		SELECT user_id, join_date, leave_date, role
 		FROM teams_users
 		WHERE teams_id = $1`
 
@@ -84,6 +84,7 @@ func (m TeamUsersModel) GetAllByTeam(teamID int64) ([]*TeamUsers, error) {
 			&teamUser.UserID,
 			&teamUser.JoinDate,
 			&teamUser.LeaveDate,
+			&teamUser.Role,
 		)
 		if err != nil {
 			return nil, err
