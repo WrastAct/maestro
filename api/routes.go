@@ -14,8 +14,6 @@ func (app *application) routes() http.Handler {
 	router.NotFound = http.HandlerFunc(app.notFoundResponse)
 	router.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
 
-	//TODO: add handlers
-
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.requireAuthenticatedUser(app.healthcheckHandler))
 
 	router.HandlerFunc(http.MethodGet, "/v1/tournaments", app.requireAuthenticatedUser(app.listTournamentHandler))
@@ -35,6 +33,10 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/v1/games/:id", app.showGameHandler)
 	router.HandlerFunc(http.MethodPatch, "/v1/games/:id", app.requirePermission("admin", app.updateGameHandler))
 	router.HandlerFunc(http.MethodDelete, "/v1/games/:id", app.requirePermission("admin", app.deleteGameHandler))
+
+	router.HandlerFunc(http.MethodPost, "/v1/matches", app.requirePermission("admin", app.createMatchHandler))
+	router.HandlerFunc(http.MethodGet, "/v1/matches", app.requireActivatedUser(app.listMatchHandler))
+	router.HandlerFunc(http.MethodDelete, "/v1/matches/:id", app.requirePermission("admin", app.deleteMatchHandler))
 
 	router.HandlerFunc(http.MethodPost, "/v1/teams_players", app.requirePermission("admin", app.createTeamUsersHandler))
 	router.HandlerFunc(http.MethodGet, "/v1/teams_players/:id", app.requireActivatedUser(app.listTeamUsersHandler))
